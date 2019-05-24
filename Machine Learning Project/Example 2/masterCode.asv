@@ -1,0 +1,23 @@
+clear;
+[x1,x2,y] = generate();
+[x1Train,x2Train,yTrain,numTrain,x1Test,x2Test,yTest,numTest] = partition(x1,x2,y);
+[W] = regression(x1Train,x2Train,yTrain,numTrain);
+
+xValues(1:numTest,1) = 1;
+xValues(1:numTest,2) = x1Test;
+xValues(1:numTest,3) = x2Test;
+predictedValues = xValues*W;
+meanSquareError = sqrt(mean((predictedValues-yTest).^2));
+
+% % Step 5: Visualization of Data and Model
+hold on
+scatter3(x1Train,x2Train,yTrain, 'o');
+bPredict = W(1);
+w1Predict = W(2);
+w2Predict = W(3);
+fsurf(@(x1,x2) bPredict+w1Predict*x1+w2Predict*x2, [-5,5]);
+zlabel('y = W(1) + W(2)*x1 + W(3)*x2');
+legend('Training Data','Training Linear Model');
+title('Linear Regression Example 1: Fitting Training Data');
+
+hold off
